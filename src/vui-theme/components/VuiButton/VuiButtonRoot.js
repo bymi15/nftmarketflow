@@ -107,6 +107,7 @@ export default styled(Button)(({ theme, ownerState }) => {
       '&:hover': {
         background: transparent.main,
         borderColor: colorValue,
+        color: colorValue,
       },
 
       '&:focus:not(:hover)': {
@@ -169,7 +170,6 @@ export default styled(Button)(({ theme, ownerState }) => {
     const colorValue = palette[color] ? palette[color].main : white.main;
 
     // color value when button is focused
-    const focusedColorValue = palette[color] ? palette[color].focus : palette[color].focus;
 
     return {
       color: colorValue,

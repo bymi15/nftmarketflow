@@ -1,4 +1,5 @@
 import { Grid } from '@mui/material';
+import { getUserNFTs } from 'flow/getUserNFTs';
 import { mint } from 'flow/mint';
 import { setupUser } from 'flow/setupUser';
 import { loginWallet } from 'flow/wallet';
@@ -16,13 +17,13 @@ import VuiTypography from 'vui-theme/components/VuiTypography';
 export default function CreateItem() {
   const navigate = useNavigate();
   const {
-    state: { user, loggedIn, collectionReady, ipfsToken },
+    state: { user, loggedIn, collectionReady, ipfsAPIKey },
     dispatch,
   } = useGlobalContext();
   const [item, setItem] = useNestedState({
     name: '',
     description: '',
-    price: 0,
+    mintedDate: new Date().toUTCString(),
   });
   const [imagePreview, setImagePreview] = useState();
 
@@ -36,10 +37,12 @@ export default function CreateItem() {
 
   const createItem = async () => {
     try {
-      await mint(ipfsToken, item, dispatch);
-      toast('Success! Your NFT has been minted.');
+      await mint(ipfsAPIKey, item, dispatch);
+      await getUserNFTs(dispatch, user?.addr);
+      toast.success('Success! Your NFT has been minted.');
       navigate('/collection');
     } catch (err) {
+      toast.error(`Error while minting NFT. Please try again.`);
       console.log('Error while minting: ' + err);
     }
   };
@@ -70,7 +73,10 @@ export default function CreateItem() {
             </Grid>
             <Grid item md={12}>
               <VuiTypography color="white" variant="body2">
-                Description <span className="muted">(Optional)</span>
+                Description{' '}
+                <VuiTypography display="inline" color="dark" variant="p" sx={{ fontSize: '12px' }}>
+                  (Optional)
+                </VuiTypography>
               </VuiTypography>
               <VuiInput
                 id="description"
@@ -80,21 +86,6 @@ export default function CreateItem() {
                 multiline
                 rows={3}
                 placeholder="Item description"
-                fullWidth
-                size="medium"
-              />
-            </Grid>
-            <Grid item md={12}>
-              <VuiTypography color="white" variant="body2">
-                Price (FLOW)
-              </VuiTypography>
-              <VuiInput
-                type="number"
-                id="price"
-                name="price"
-                value={item.price}
-                onChange={(e) => handleInputChange(e, setItem)}
-                placeholder="Enter price in FLOW"
                 fullWidth
                 size="medium"
               />

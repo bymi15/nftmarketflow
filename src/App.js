@@ -1,6 +1,6 @@
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
-import { getIPFSToken } from 'api/ipfsToken';
+import { getIPFSAPIKey } from 'api/apiKeys';
 import Footer from 'components/Footer';
 import Loader from 'components/Loader';
 import Navbar from 'components/Navbar';
@@ -22,7 +22,7 @@ import { useGlobalContext } from 'state/context';
 export default function App() {
   const { pathname } = useLocation();
   const {
-    state: { user, loading, loadingText, ipfsToken },
+    state: { user, loading, loadingText },
     dispatch,
   } = useGlobalContext();
 
@@ -67,24 +67,22 @@ export default function App() {
   }, [user]);
 
   useEffect(() => {
-    async function fetchIPFSToken() {
+    async function fetchKeys() {
       try {
-        await getIPFSToken(dispatch);
+        await getIPFSAPIKey(dispatch);
       } catch (e) {
-        console.log('error occurred while getting ipfs token');
+        console.log('error occurred while getting api keys');
         setLoadingAction(dispatch, false, '');
       }
     }
-    if (!ipfsToken) {
-      fetchIPFSToken();
-    }
+    fetchKeys();
   }, []);
 
   return (
     <>
       <CssBaseline />
       <Loader isActive={loading} text={loadingText}>
-        <ToastContainer />
+        <ToastContainer position="top-center" theme="dark" bodyStyle={{ fontSize: '14px' }} />
         <PageLayout>
           <Container>
             <Navbar />

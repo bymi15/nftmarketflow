@@ -7,6 +7,8 @@ pub contract NFTStore: NonFungibleToken {
     pub event Withdraw(id: UInt64, from: Address?)
     pub event Deposit(id: UInt64, to: Address?)
 
+    pub event NFTCreated(id: UInt64)
+
     pub resource NFT: NonFungibleToken.INFT {
         pub let id: UInt64
         pub let ipfsHash: String
@@ -17,6 +19,8 @@ pub contract NFTStore: NonFungibleToken {
             self.id = NFTStore.totalSupply
             self.ipfsHash = ipfsHash
             self.metadata = metadata
+
+            emit NFTCreated(id: self.id)
         }
     }
 
@@ -66,6 +70,7 @@ pub contract NFTStore: NonFungibleToken {
     }
 
     pub fun mintToken(ipfsHash: String, metadata: {String: String}): @NFTStore.NFT {
+        metadata.insert(key: "creator", self.account.address.toString())
         return <- create NFT(ipfsHash: ipfsHash, metadata: metadata)
     }
     

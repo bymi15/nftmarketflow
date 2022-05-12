@@ -1,7 +1,9 @@
 import Grid from '@mui/material/Grid';
 import { upsertSaleItem } from 'api/saleItems';
 import ItemCard from 'components/ItemCard';
+import ItemCardSkeleton from 'components/ItemCardSkeleton';
 import { getSaleItemListedEvent } from 'flow/events';
+import { getUserNFTsForSale } from 'flow/getUserNFTsForSale';
 import { listNFTForSale } from 'flow/listNFTForSale';
 import { setupUser } from 'flow/setupUser';
 import { loginWallet } from 'flow/wallet';
@@ -17,37 +19,36 @@ import ListForSaleModal from './components/ListForSaleModal';
 
 export default function Collection() {
   const {
-    state: { user, loggedIn, collection, salesCollection, collectionReady },
+    state: { user, loggedIn, collection, salesCollection, collectionReady, loading },
     dispatch,
   } = useGlobalContext();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedNFT, setSelectedNFT] = useState();
+
   const handleListForSale = async (item, nft) => {
     try {
       const txID = await listNFTForSale(item, dispatch);
       console.log(txID);
       const saleItemEvent = await getSaleItemListedEvent();
       setLoadingAction(dispatch, true, 'Saving NFT listing in database...');
-      const apiResponse = await upsertSaleItem(
-        dispatch,
-        constructSaleItemDoc(nft, saleItemEvent, user.addr)
-      );
+      await upsertSaleItem(dispatch, constructSaleItemDoc(nft, saleItemEvent, user?.addr));
+      await getUserNFTsForSale(dispatch, user?.addr);
       setLoadingAction(dispatch, false, '');
-      toast(`Success! Your NFT has been listed for sale at ${saleItemEvent.price} FLOW`);
-      console.log(apiResponse);
+      toast.success(`Success! Your NFT has been listed for sale at ${saleItemEvent.price} FLOW`);
     } catch (e) {
       setLoadingAction(dispatch, false, '');
-      console.log('error occurred while listing NFT for sale');
+      toast.error(`Error while listing NFT for sale. Please try again.`);
       console.log(e);
     }
   };
 
   const handleRemoveFromSale = async (item) => {
+    toast.error(`Error while listing NFT for sale. Please try again.`);
     // const txID = await listNFTForSale(item, dispatch);
     // console.log(txID);
     // await getSaleItemListedEvent((event) => console.log(event));
-    const event = await getSaleItemListedEvent();
-    console.log(event);
+    // const event = await getSaleItemRemovedEvent();
+    // console.log(event);
   };
 
   const handleOpenModal = (nft) => {
@@ -55,7 +56,24 @@ export default function Collection() {
     setModalOpen(true);
   };
 
-  return user && loggedIn && collectionReady ? (
+  return loading ? (
+    <VuiBox py={3}>
+      <VuiBox mb={3}>
+        <VuiTypography color="white" fontWeight="bold">
+          NFT Collection
+        </VuiTypography>
+      </VuiBox>
+      <Grid container spacing={5} direction="row" alignItems="stretch">
+        {Array(6)
+          .fill()
+          .map((i) => (
+            <Grid item xs={12} md={4} key={i}>
+              <ItemCardSkeleton />
+            </Grid>
+          ))}
+      </Grid>
+    </VuiBox>
+  ) : user && loggedIn && collectionReady ? (
     <>
       <ListForSaleModal
         open={modalOpen}
@@ -79,6 +97,7 @@ export default function Collection() {
                   description={nft.metadata?.description}
                   link={`/nft/${nft.id}`}
                   onClickListForSale={() => handleOpenModal(nft)}
+                  creator={nft.metadata?.creator}
                 />
               </Grid>
             ))
@@ -106,6 +125,7 @@ export default function Collection() {
                   link={`/nft/${salesCollection[id].nftRef?.id}`}
                   price={salesCollection[id].price}
                   onClickRemoveFromSale={handleRemoveFromSale}
+                  creator={salesCollection[id].nftRef?.metadata?.creator}
                   isOwner
                 />
               </Grid>

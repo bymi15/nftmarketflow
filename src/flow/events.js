@@ -33,6 +33,14 @@ const getEvent = async ({ contractAddress, contractName, eventName }) => {
     : null;
 };
 
+export const getNFTCreatedEvent = async () => {
+  return await getEvent({
+    contractName: 'NFTStore',
+    contractAddress: '3acc4fa9e74dfa02', // address without 0x prefix
+    eventName: 'NFTCreated',
+  });
+};
+
 export const getSaleItemListedEvent = async () => {
   return await getEvent({
     contractName: 'NFTMarketplace',

@@ -3,7 +3,7 @@ import { reducer } from './reducer';
 
 const initialState = {
   user: null,
-  ipfsToken: '',
+  ipfsAPIKey: '',
   loggedIn: false,
   collectionReady: false,
   collection: [],

@@ -1,8 +1,8 @@
-import { CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { getSaleItems } from 'api/saleItems';
 import placeholderImage from 'assets/images/nftplaceholder.jpg';
 import ItemCard from 'components/ItemCard';
+import ItemCardSkeleton from 'components/ItemCardSkeleton';
 import { useEffect, useState } from 'react';
 import { useGlobalContext } from 'state/context';
 import VuiBox from 'vui-theme/components/VuiBox';
@@ -49,7 +49,7 @@ const mockItems = [
 
 export default function Items() {
   const {
-    state: { user, loggedIn, saleItems },
+    state: { user, saleItems },
     dispatch,
   } = useGlobalContext();
 
@@ -76,20 +76,21 @@ export default function Items() {
   };
 
   return loading ? (
-    <VuiBox
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        height: '70vh',
-        paddingBottom: '50px',
-      }}
-    >
-      <VuiTypography color="white" fontWeight="bold" sx={{ marginBottom: '10px' }}>
-        Loading items for sale...
-      </VuiTypography>
-      <CircularProgress color="inherit" />
+    <VuiBox py={3}>
+      <VuiBox mb={3}>
+        <VuiTypography color="white" fontWeight="bold">
+          NFT Collection
+        </VuiTypography>
+      </VuiBox>
+      <Grid container spacing={5} direction="row" alignItems="stretch">
+        {Array(6)
+          .fill()
+          .map((i) => (
+            <Grid item xs={12} md={4} key={i}>
+              <ItemCardSkeleton />
+            </Grid>
+          ))}
+      </Grid>
     </VuiBox>
   ) : (
     <>
@@ -108,7 +109,7 @@ export default function Items() {
         <Grid container spacing={5} direction="row" alignItems="stretch">
           {saleItems && saleItems.length > 0
             ? saleItems.map((item) => (
-                <Grid item xs={12} md={4} key={item._id}>
+                <Grid item xs={12} md={4} key={item.nftID}>
                   <ItemCard
                     image={`https://${item.ipfsHash}.ipfs.nftstorage.link`}
                     title={item.metadata?.name}
@@ -117,6 +118,7 @@ export default function Items() {
                     price={item.price}
                     isOwner={item.listedBy === user?.addr}
                     onClickPurchase={() => handleOpenModal(item)}
+                    creator={item.metadata?.creator}
                   />
                 </Grid>
               ))

@@ -4,7 +4,7 @@ import {
   removeSaleItemAction,
   upsertSaleItemAction,
 } from 'state/actions/apiSaleItemsActions';
-import { callDelete, callGet, callPut } from './api';
+import { callDelete, callGet, callPut } from './request';
 
 export const getSaleItems = async (dispatch) => {
   const { data, err } = await callGet('/saleItems');

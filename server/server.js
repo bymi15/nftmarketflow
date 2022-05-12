@@ -5,7 +5,7 @@ const cors = require('cors');
 const db = require('./db/db');
 
 const saleItems = require('./routes/saleItems');
-const ipfsToken = require('./routes/ipfsToken');
+const apiKeys = require('./routes/apiKeys');
 
 const PORT = process.env.PORT || 5000;
 
@@ -23,4 +23,4 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/saleItems', saleItems);
-app.use('/ipfsToken', ipfsToken);
+app.use('/apiKeys', apiKeys);
