@@ -5,6 +5,7 @@ export const loadFCLConfig = (env) => {
     .config()
     .put('env', 'testnet')
     .put('app.detail.title', 'NFTMarketFlow')
+    .put('app.detail.icon', 'https://placekitten.com/g/200/200')
     .put('accessNode.api', 'https://rest-testnet.onflow.org')
     .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn')
     .put('0xFungibleToken', '0x9a0766d93b6608b7')

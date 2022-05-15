@@ -16,6 +16,7 @@ import VuiBox from 'vui-theme/components/VuiBox';
 import VuiButton from 'vui-theme/components/VuiButton';
 import VuiTypography from 'vui-theme/components/VuiTypography';
 import ListForSaleModal from './components/ListForSaleModal';
+import { handleRemoveFromSale } from 'utils/utils';
 
 export default function Collection() {
   const {
@@ -27,8 +28,7 @@ export default function Collection() {
 
   const handleListForSale = async (item, nft) => {
     try {
-      const txID = await listNFTForSale(item, dispatch);
-      console.log(txID);
+      await listNFTForSale(item, dispatch);
       const saleItemEvent = await getSaleItemListedEvent();
       setLoadingAction(dispatch, true, 'Saving NFT listing in database...');
       await upsertSaleItem(dispatch, constructSaleItemDoc(nft, saleItemEvent, user?.addr));
@@ -40,15 +40,6 @@ export default function Collection() {
       toast.error(`Error while listing NFT for sale. Please try again.`);
       console.log(e);
     }
-  };
-
-  const handleRemoveFromSale = async (item) => {
-    toast.error(`Error while listing NFT for sale. Please try again.`);
-    // const txID = await listNFTForSale(item, dispatch);
-    // console.log(txID);
-    // await getSaleItemListedEvent((event) => console.log(event));
-    // const event = await getSaleItemRemovedEvent();
-    // console.log(event);
   };
 
   const handleOpenModal = (nft) => {
@@ -124,7 +115,7 @@ export default function Collection() {
                   description={salesCollection[id].nftRef?.metadata?.description}
                   link={`/nft/${salesCollection[id].nftRef?.id}`}
                   price={salesCollection[id].price}
-                  onClickRemoveFromSale={handleRemoveFromSale}
+                  onClickRemoveFromSale={() => handleRemoveFromSale(dispatch, item)}
                   creator={salesCollection[id].nftRef?.metadata?.creator}
                   isOwner
                 />

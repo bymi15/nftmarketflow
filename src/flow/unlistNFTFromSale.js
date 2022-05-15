@@ -1,20 +1,15 @@
 import * as fcl from '@onflow/fcl';
 import * as t from '@onflow/types';
-import listNFTForSaleCadence from 'cadence/transactions/ListNFTForSale.cdc';
+import unlistNFTFromSaleCadence from 'cadence/transactions/UnlistNFTFromSale.cdc';
 import { setLoadingAction } from 'state/actions/loadingActions';
 
-export const listNFTForSale = async (item, dispatch) => {
-  setLoadingAction(dispatch, true, 'Listing NFT for sale...');
+export const unlistNFTFromSale = async (id, dispatch) => {
+  setLoadingAction(dispatch, true, 'Unlisting NFT from sale...');
 
-  let price = item.price.toString();
-  if (!price.includes('.')) {
-    price = price + '.0';
-  }
-
-  const listNFTForSaleCodeText = await (await fetch(listNFTForSaleCadence)).text();
+  const unlistNFTFromSaleCodeText = await (await fetch(unlistNFTFromSaleCadence)).text();
   const transaction = await fcl.send([
-    fcl.transaction(listNFTForSaleCodeText),
-    fcl.args([fcl.arg(parseInt(item.id), t.UInt64), fcl.arg(price, t.UFix64)]),
+    fcl.transaction(unlistNFTFromSaleCodeText),
+    fcl.args([fcl.arg(parseInt(id), t.UInt64)]),
     fcl.payer(fcl.authz),
     fcl.proposer(fcl.authz),
     fcl.authorizations([fcl.authz]),

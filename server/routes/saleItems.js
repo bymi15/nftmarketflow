@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../db/db');
+const mongodb = require('mongodb');
 
 const saleItemRoutes = express.Router();
 
@@ -44,15 +45,16 @@ saleItemRoutes.put('/', async (req, res) => {
 });
 
 saleItemRoutes.delete('/:id', async (req, res) => {
+  console.log(req.params.id);
   const saleItems = db.getCollection(COLLECTION);
-  saleItems.deleteOne({ id: req.params.id }, function (err, _) {
-    if (err) {
-      res.status(400).send(`Error removing sale item with id ${req.params.id}!`);
-    } else {
-      console.log('Removed sale item');
-      res.status(200).send();
-    }
-  });
+  try {
+    await saleItems.deleteOne({ _id: new mongodb.ObjectId(req.params.id) });
+    console.log('Removed sale item');
+    res.status(200).send();
+  } catch (err) {
+    console.log(err);
+    res.status(400).send(`Error removing sale item with id ${req.params.id}!`);
+  }
 });
 
 module.exports = saleItemRoutes;

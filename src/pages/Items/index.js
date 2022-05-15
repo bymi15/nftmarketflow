@@ -1,47 +1,54 @@
 import Grid from '@mui/material/Grid';
+import { removeSaleItem } from 'api/saleItems';
 import { getSaleItems } from 'api/saleItems';
 import placeholderImage from 'assets/images/nftplaceholder.jpg';
 import ItemCard from 'components/ItemCard';
 import ItemCardSkeleton from 'components/ItemCardSkeleton';
+import { purchaseNFT } from 'flow/purchaseNFT';
+import { loginWallet } from 'flow/wallet';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useGlobalContext } from 'state/context';
 import VuiBox from 'vui-theme/components/VuiBox';
 import VuiTypography from 'vui-theme/components/VuiTypography';
 import PurchaseModal from './components/PurchaseModal';
+import { handleRemoveFromSale } from 'utils/utils';
+import { setLoadingAction } from 'state/actions/loadingActions';
+import { getUserNFTs } from 'flow/getUserNFTs';
 
 const mockItems = [
   {
     image: placeholderImage,
     label: 'Test NFT Collection #' + Math.round(Math.random() * 1000),
-    title: 'Test Title',
+    title: 'Test Title 1',
     description: 'Test Description',
     link: '/collections/1',
   },
   {
     image: placeholderImage,
     label: 'Test NFT Collection #' + Math.round(Math.random() * 1000),
-    title: 'Test Title',
+    title: 'Test Title 2',
     description: 'Test Description',
     link: '/collections/1',
   },
   {
     image: placeholderImage,
     label: 'Test NFT Collection #' + Math.round(Math.random() * 1000),
-    title: 'Test Title',
+    title: 'Test Title 3',
     description: 'Test Description',
     link: '/collections/1',
   },
   {
     image: placeholderImage,
     label: 'Test NFT Collection #' + Math.round(Math.random() * 1000),
-    title: 'Test Title',
+    title: 'Test Title 4',
     description: 'Test Description',
     link: '/collections/1',
   },
   {
     image: placeholderImage,
     label: 'Test NFT Collection #' + Math.round(Math.random() * 1000),
-    title: 'Test Title',
+    title: 'Test Title 5',
     description: 'Test Description',
     link: '/collections/1',
   },
@@ -49,7 +56,7 @@ const mockItems = [
 
 export default function Items() {
   const {
-    state: { user, saleItems },
+    state: { user, loggedIn, saleItems, saleItemsError },
     dispatch,
   } = useGlobalContext();
 
@@ -71,8 +78,25 @@ export default function Items() {
     setModalOpen(true);
   };
 
-  const handlePurchase = (item) => {
-    console.log(item);
+  const handlePurchase = async (item) => {
+    if (!loggedIn || !user) {
+      toast.warn(`Please connect to your wallet to make a purchase.`);
+      loginWallet(dispatch);
+      return;
+    }
+
+    try {
+      await purchaseNFT(item.listedBy, item.nftID, dispatch);
+      setLoadingAction(dispatch, true, 'Updating database...');
+      await removeSaleItem(dispatch, item._id);
+      toast.success('Success! Purchased NFT has been transferred to your collection.');
+      await getUserNFTs(dispatch, user?.addr);
+    } catch (err) {
+      toast.error(`Error while purchasing NFT. Please try again.`);
+      console.log(err);
+    }
+
+    setLoadingAction(dispatch, false, '');
   };
 
   return loading ? (
@@ -119,11 +143,12 @@ export default function Items() {
                     isOwner={item.listedBy === user?.addr}
                     onClickPurchase={() => handleOpenModal(item)}
                     creator={item.metadata?.creator}
+                    onClickRemoveFromSale={() => handleRemoveFromSale(dispatch, item)}
                   />
                 </Grid>
               ))
             : mockItems.map((c) => (
-                <Grid item xs={12} md={4} key={c.label}>
+                <Grid item xs={12} md={4} key={c.title}>
                   <ItemCard
                     image={c.image}
                     title={c.title}

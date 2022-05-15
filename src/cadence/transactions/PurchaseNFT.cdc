@@ -13,7 +13,7 @@ transaction(account: Address, id: UInt64) {
                         ?? panic("Failed to get User's collection.")
         let price = saleCollection.getPrice(id: id)
         let payment <- acct.borrow<&FlowToken.Vault>(from: /storage/flowTokenVault)!.withdraw(amount: price) as! @FlowToken.Vault
-        saleCollection.purchase(id: id, recipientCollection: recipientCollection, payment: <- payment)
+        saleCollection.purchaseNFT(id: id, recipientCollection: recipientCollection, payment: <- payment)
     }
     
     execute {
