@@ -1,7 +1,5 @@
 const APIURL =
-  process.env.REACT_APP_ENV === 'dev'
-    ? 'http://localhost:5000'
-    : 'https://nftmarketflow.herokuapp.com';
+  process.env.NODE_ENV === 'dev' ? 'http://localhost:5000' : 'https://nftmarketflow.herokuapp.com';
 
 export const callGet = async (url) => {
   let res = {
