@@ -44,10 +44,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "dev": "nodemon server/server.js",
-    "server": "node server/server.js"
+    "server": "node server/server.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build; git push heroku main"
   },
   "eslintConfig": {
     "extends": [
@@ -68,6 +70,7 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^4.0.0",
     "jest-watch-typeahead": "^0.6.5",
     "nodemon": "^2.0.16"
   },

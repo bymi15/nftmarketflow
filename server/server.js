@@ -22,5 +22,8 @@ db.connect(function (err) {
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.get('/', (_, res) => {
+  res.send('pong');
+});
 app.use('/saleItems', saleItems);
 app.use('/apiKeys', apiKeys);
