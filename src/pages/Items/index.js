@@ -15,6 +15,8 @@ import PurchaseModal from './components/PurchaseModal';
 import { handleRemoveFromSale } from 'utils/utils';
 import { setLoadingAction } from 'state/actions/loadingActions';
 import { getUserNFTs } from 'flow/getUserNFTs';
+import { insertActivity } from 'api/activities';
+import { constructActivityDoc } from 'utils/utils';
 
 const mockItems = [
   {
@@ -89,6 +91,7 @@ export default function Items() {
       await purchaseNFT(item.listedBy, item.nftID, dispatch);
       setLoadingAction(dispatch, true, 'Updating database...');
       await removeSaleItem(dispatch, item._id);
+      await insertActivity(dispatch, constructActivityDoc('SALE', null, item, user?.addr));
       toast.success('Success! Purchased NFT has been transferred to your collection.');
       await getUserNFTs(dispatch, user?.addr);
     } catch (err) {

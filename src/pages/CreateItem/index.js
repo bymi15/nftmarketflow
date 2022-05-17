@@ -1,4 +1,5 @@
 import { Grid } from '@mui/material';
+import { insertActivity } from 'api/activities';
 import { getUserNFTs } from 'flow/getUserNFTs';
 import { mint } from 'flow/mint';
 import { setupUser } from 'flow/setupUser';
@@ -9,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useGlobalContext } from 'state/context';
 import { handleInputChange, useNestedState } from 'utils/hooks';
+import { constructActivityDoc } from 'utils/utils';
 import VuiBox from 'vui-theme/components/VuiBox';
 import VuiButton from 'vui-theme/components/VuiButton';
 import VuiInput from 'vui-theme/components/VuiInput';
@@ -23,7 +25,6 @@ export default function CreateItem() {
   const [item, setItem] = useNestedState({
     name: '',
     description: '',
-    mintedDate: new Date().toUTCString(),
   });
   const [imagePreview, setImagePreview] = useState();
 
@@ -36,9 +37,17 @@ export default function CreateItem() {
   };
 
   const createItem = async () => {
+    const itemData = {
+      ...item,
+      mintedDate: new Date().toUTCString(),
+    };
     try {
-      await mint(ipfsAPIKey, item, dispatch);
+      const ipfsHash = await mint(ipfsAPIKey, itemData, dispatch);
       await getUserNFTs(dispatch, user?.addr);
+      await insertActivity(
+        dispatch,
+        constructActivityDoc('MINT', null, { ...itemData, ipfsHash }, user?.addr)
+      );
       toast.success('Success! Your NFT has been minted.');
       navigate('/collection');
     } catch (err) {

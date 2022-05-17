@@ -43,5 +43,5 @@ export const mint = async (apiKey, metadata, dispatch) => {
   setLoadingAction(dispatch, true, 'Processing transaction...');
   await fcl.tx(txId).onceSealed();
   setLoadingAction(dispatch, false, '');
-  return txId;
+  return cid;
 };

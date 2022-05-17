@@ -19,6 +19,8 @@ import ListForSaleModal from './components/ListForSaleModal';
 import { handleRemoveFromSale } from 'utils/utils';
 import TabPanel from 'components/TabPanel';
 import { Tab, Tabs } from '@mui/material';
+import { constructActivityDoc } from 'utils/utils';
+import { insertActivity } from 'api/activities';
 
 export default function Collection() {
   const {
@@ -28,7 +30,6 @@ export default function Collection() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedNFT, setSelectedNFT] = useState();
   const [selectedTab, setSelectedTab] = useState(0);
-
   const handleListForSale = async (item, nft) => {
     try {
       await listNFTForSale(item, dispatch);
@@ -36,6 +37,7 @@ export default function Collection() {
       setLoadingAction(dispatch, true, 'Saving NFT listing in database...');
       await upsertSaleItem(dispatch, constructSaleItemDoc(nft, saleItemEvent, user?.addr));
       await getUserNFTsForSale(dispatch, user?.addr);
+      await insertActivity(dispatch, constructActivityDoc('LIST', nft, saleItemEvent, user?.addr));
       setLoadingAction(dispatch, false, '');
       toast.success(`Success! Your NFT has been listed for sale at ${saleItemEvent.price} FLOW`);
     } catch (e) {

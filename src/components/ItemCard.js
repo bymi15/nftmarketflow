@@ -69,7 +69,7 @@ export default function ItemCard({
                 {title}
               </VuiTypography>
             </VuiBox>
-            {price && (
+            {price !== undefined && (
               <VuiBox>
                 <VuiTypography variant="button" fontWeight="bold" color="success">
                   {roundToTwo(parseFloat(price))} FLOW
@@ -82,8 +82,8 @@ export default function ItemCard({
           </VuiBox>
         </Link>
         <VuiBox mt={3} display="flex" justifyContent="space-between" alignItems="center">
-          {price &&
-            (onClickRemoveFromSale && isOwner ? (
+          {price !== undefined ? (
+            onClickRemoveFromSale !== undefined && isOwner ? (
               <VuiButton
                 component={Button}
                 onClick={onClickRemoveFromSale}
@@ -95,7 +95,7 @@ export default function ItemCard({
               </VuiButton>
             ) : (
               !isOwner &&
-              onClickPurchase && (
+              onClickPurchase !== undefined && (
                 <VuiButton
                   component={Button}
                   onClick={onClickPurchase}
@@ -106,8 +106,9 @@ export default function ItemCard({
                   Buy NFT
                 </VuiButton>
               )
-            ))}
-          {onClickListForSale && (
+            )
+          ) : null}
+          {onClickListForSale !== undefined && (
             <VuiButton
               component={Button}
               onClick={onClickListForSale}

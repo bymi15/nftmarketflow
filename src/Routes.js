@@ -1,8 +1,8 @@
+import Activity from 'pages/Activity';
 import Collection from 'pages/Collection';
 import CreateItem from 'pages/CreateItem';
 import Home from 'pages/Home';
 import Items from 'pages/Items';
-import { IoCreateOutline, IoHome, IoList } from 'react-icons/io5';
 import { Navigate, Route, Routes as RoutesDOM } from 'react-router-dom';
 
 const routes = [
@@ -10,7 +10,6 @@ const routes = [
     name: 'Home',
     key: 'home',
     route: '/',
-    icon: <IoHome size="15px" color="inherit" />,
     component: <Home />,
     noCollapse: true,
   },
@@ -18,7 +17,6 @@ const routes = [
     name: 'Items',
     key: 'items',
     route: '/items',
-    icon: <IoList size="15px" color="inherit" />,
     component: <Items />,
     noCollapse: true,
   },
@@ -26,7 +24,6 @@ const routes = [
     name: 'Collection',
     key: 'collection',
     route: '/collection',
-    icon: <IoList size="15px" color="inherit" />,
     component: <Collection />,
     noCollapse: true,
   },
@@ -34,8 +31,14 @@ const routes = [
     name: 'Create Item',
     key: 'create',
     route: '/create',
-    icon: <IoCreateOutline size="15px" color="inherit" />,
     component: <CreateItem />,
+    noCollapse: true,
+  },
+  {
+    name: 'Activity',
+    key: 'activity',
+    route: '/activity',
+    component: <Activity />,
     noCollapse: true,
   },
 ];

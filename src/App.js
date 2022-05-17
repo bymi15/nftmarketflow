@@ -45,7 +45,7 @@ export default function App() {
       try {
         await getUserNFTs(dispatch, addr);
       } catch (e) {
-        console.log('error occurred while getting collection');
+        console.log(e);
         setLoadingAction(dispatch, false, '');
         resetCollectionAction(dispatch);
       }
@@ -55,7 +55,7 @@ export default function App() {
       try {
         await getUserNFTsForSale(dispatch, addr);
       } catch (e) {
-        console.log('error occurred while getting sales collection');
+        console.log(e);
         setLoadingAction(dispatch, false, '');
         resetSalesCollectionAction(dispatch);
       }

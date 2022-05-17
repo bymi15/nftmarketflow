@@ -5,41 +5,38 @@ const activityRoutes = express.Router();
 
 const COLLECTION = 'activities';
 
-activityRoutes.get('/', (req, res) => {
-  const activities = db.getCollection(COLLECTION);
-  activities
-    .find({})
-    .limit(100)
-    .toArray(function (err, result) {
-      if (err) {
-        res.sendStatus(500);
-      } else {
-        res.json(result);
-      }
-    });
+activityRoutes.get('/', async (req, res) => {
+  const activitiesCollection = db.getCollection(COLLECTION);
+  let query = {};
+  if (req.query.eventType) {
+    query.eventType = req.query.eventType;
+  }
+  if (req.query.userAddr) {
+    query.userAddr = req.query.userAddr;
+  }
+  const result = await activitiesCollection.find(query).sort({ date: -1 }).limit(100).toArray();
+  res.status(200).json(result);
 });
 
 activityRoutes.post('/', async (req, res) => {
-  const activities = db.getCollection(COLLECTION);
+  const activitiesCollection = db.getCollection(COLLECTION);
   const doc = {
+    eventType: req.body.eventType,
     nftID: req.body.nftID,
+    nftName: req.body.nftName,
+    owner: req.body.owner,
     price: req.body.price,
-    metadata: req.body.metadata,
     ipfsHash: req.body.ipfsHash,
-    uuid: req.body.uuid,
-    listedBy: req.body.listedBy,
-    updatedAt: new Date(),
+    userAddr: req.body.userAddr,
+    date: new Date(),
   };
 
-  const query = { nftID: doc.nftID };
-  const update = { $set: doc };
-  const options = { upsert: true, returnNewDocument: true };
   try {
-    const result = await activities.findOneAndUpdate(query, update, options);
-    res.status(200).json(result?.value);
+    const result = await activitiesCollection.insertOne(doc);
+    res.status(200).json({ _id: result?.insertedId, ...doc });
   } catch (err) {
     console.log(err);
-    res.status(400).send('Error inserting sale item!');
+    res.status(400).send('Error inserting activity!');
   }
 });
 

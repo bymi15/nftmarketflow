@@ -7,6 +7,7 @@ const db = require('./db/db');
 const saleItems = require('./routes/saleItems');
 const apiKeys = require('./routes/apiKeys');
 const currency = require('./routes/currency');
+const activities = require('./routes/activities');
 
 const PORT = process.env.PORT || 5000;
 
@@ -29,3 +30,4 @@ app.get('/', (_, res) => {
 app.use('/saleItems', saleItems);
 app.use('/apiKeys', apiKeys);
 app.use('/currency', currency);
+app.use('/activities', activities);

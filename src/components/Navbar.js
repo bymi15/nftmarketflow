@@ -104,12 +104,12 @@ export default function DashboardNavbar() {
                     'aria-labelledby': 'basic-button',
                   }}
                 >
-                  <MenuItem onClick={() => setAnchorEl(null)}>Profile</MenuItem>
                   {collectionReady ? (
                     <MenuItem onClick={() => navigate('/collection')}>My Collection</MenuItem>
                   ) : (
                     <MenuItem onClick={handleSetupCollection}>Setup My Collection</MenuItem>
                   )}
+                  <MenuItem onClick={() => navigate('/activity')}>My Activity</MenuItem>
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
               </>

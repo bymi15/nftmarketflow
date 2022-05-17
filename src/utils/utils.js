@@ -3,6 +3,9 @@ import { getSaleItemRemovedEvent } from 'flow/events';
 import { unlistNFTFromSale } from 'flow/unlistNFTFromSale';
 import { toast } from 'react-toastify';
 import { setLoadingAction } from 'state/actions/loadingActions';
+import { MdSell } from 'react-icons/md';
+import { FaCloudUploadAlt, FaClipboardList } from 'react-icons/fa';
+import palette from 'vui-theme/assets/theme/base/colors';
 
 export const roundToTwo = (num) => {
   return +(Math.round(num + 'e+2') + 'e-2');
@@ -17,6 +20,35 @@ export const constructSaleItemDoc = (nft, saleItemEvent, userAddr) => ({
   listedBy: userAddr,
 });
 
+export const constructActivityDoc = (eventType, nft, item, userAddr) =>
+  eventType === 'LIST'
+    ? {
+        eventType,
+        nftID: item.id,
+        nftName: nft.metadata?.name,
+        owner: userAddr,
+        price: item.price,
+        ipfsHash: nft.ipfsHash,
+        userAddr,
+      }
+    : eventType === 'MINT'
+    ? {
+        eventType,
+        nftName: item.name,
+        owner: userAddr,
+        ipfsHash: item.ipfsHash,
+        userAddr,
+      }
+    : {
+        eventType,
+        nftID: item.nftID,
+        nftName: item.metadata?.name,
+        owner: item.listedBy,
+        price: item.price,
+        ipfsHash: item.ipfsHash,
+        userAddr,
+      };
+
 export const handleRemoveFromSale = async (dispatch, item) => {
   try {
     await unlistNFTFromSale(item.nftID, dispatch);
@@ -29,4 +61,43 @@ export const handleRemoveFromSale = async (dispatch, item) => {
     toast.error(`Error while removing NFT from sale. Please try again.`);
   }
   setLoadingAction(dispatch, false, '');
+};
+
+export const getActivityDescription = (activity, userAddr) => {
+  const userDisplay = userAddr === activity.userAddr ? 'You' : activity.userAddr;
+  switch (activity.eventType) {
+    case 'LIST':
+      return (
+        <>
+          listed by <b>{userDisplay}</b> for <b>{activity.price} FLOW</b>
+        </>
+      );
+    case 'MINT':
+      return (
+        <>
+          minted by <b>{userDisplay}</b>
+        </>
+      );
+    case 'SALE':
+      return (
+        <>
+          purchased by <b>{userDisplay}</b> for <b>{activity.price} FLOW</b>
+        </>
+      );
+    default:
+      return '';
+  }
+};
+
+export const getActivityIcon = (activity) => {
+  switch (activity.eventType) {
+    case 'LIST':
+      return <FaClipboardList size="16px" color={palette.lightblue.main} />;
+    case 'MINT':
+      return <FaCloudUploadAlt size="16px" color={palette.success.main} />;
+    case 'SALE':
+      return <MdSell size="16px" color={palette.primary.main} />;
+    default:
+      return <BsList size="16px" color={palette.lightblue.main} />;
+  }
 };

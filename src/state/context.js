@@ -13,6 +13,7 @@ const initialState = {
   saleItemsError: null,
   saleItems: [],
   currency: null,
+  activities: [],
 };
 
 const GlobalContext = createContext({

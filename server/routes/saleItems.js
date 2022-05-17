@@ -34,10 +34,14 @@ saleItemRoutes.put('/', async (req, res) => {
 
   const query = { nftID: doc.nftID };
   const update = { $set: doc };
-  const options = { upsert: true, returnNewDocument: true };
+  const options = { upsert: true, returnNewDocument: true, returnDocument: 'after' };
   try {
     const result = await saleItems.findOneAndUpdate(query, update, options);
-    res.status(200).json(result?.value);
+    if (result?.value) {
+      res.status(200).json(result?.value);
+    } else {
+      res.status(200).json({ _id: result.lastErrorObject?.upserted, ...doc });
+    }
   } catch (err) {
     console.log(err);
     res.status(400).send('Error inserting sale item!');
