@@ -12,6 +12,7 @@ const initialState = {
   loadingText: '',
   saleItemsError: null,
   saleItems: [],
+  currency: null,
 };
 
 const GlobalContext = createContext({

@@ -35,12 +35,12 @@ function Footer() {
         <VuiBox display="flex" justifyContent="center" flexWrap="wrap" mb={3}>
           <VuiBox mr={{ xs: '20px', lg: '46px' }}>
             <VuiTypography component="a" href="/items" variant="body2" color="white">
-              Collections
+              Items
             </VuiTypography>
           </VuiBox>
           <VuiBox mr={{ xs: '20px', lg: '46px' }}>
-            <VuiTypography component="a" href="/activity" variant="body2" color="white">
-              Activity
+            <VuiTypography component="a" href="/transactions" variant="body2" color="white">
+              Transactions
             </VuiTypography>
           </VuiBox>
           <VuiBox mr={{ xs: '20px', lg: '46px' }}>

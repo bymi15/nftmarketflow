@@ -34,6 +34,8 @@ export function reducer(state, action) {
       return { ...state, saleItemsError: action.payload };
     case 'API_GET_IPFS_API_KEY':
       return { ...state, ipfsAPIKey: action.payload };
+    case 'API_GET_CURRENCY':
+      return { ...state, currency: action.payload };
     default:
       return state;
   }

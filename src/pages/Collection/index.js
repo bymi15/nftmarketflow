@@ -17,6 +17,8 @@ import VuiButton from 'vui-theme/components/VuiButton';
 import VuiTypography from 'vui-theme/components/VuiTypography';
 import ListForSaleModal from './components/ListForSaleModal';
 import { handleRemoveFromSale } from 'utils/utils';
+import TabPanel from 'components/TabPanel';
+import { Tab, Tabs } from '@mui/material';
 
 export default function Collection() {
   const {
@@ -25,6 +27,7 @@ export default function Collection() {
   } = useGlobalContext();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedNFT, setSelectedNFT] = useState();
+  const [selectedTab, setSelectedTab] = useState(0);
 
   const handleListForSale = async (item, nft) => {
     try {
@@ -78,55 +81,63 @@ export default function Collection() {
             NFT Collection
           </VuiTypography>
         </VuiBox>
-        <Grid container spacing={5} direction="row" alignItems="stretch">
-          {collection && collection.length > 0 ? (
-            collection.map((nft) => (
-              <Grid key={nft.id} item xs={12} md={4}>
-                <ItemCard
-                  image={`https://${nft.ipfsHash}.ipfs.nftstorage.link`}
-                  title={nft.metadata?.name}
-                  description={nft.metadata?.description}
-                  link={`/nft/${nft.id}`}
-                  onClickListForSale={() => handleOpenModal(nft)}
-                  creator={nft.metadata?.creator}
-                />
-              </Grid>
-            ))
-          ) : (
-            <Grid item md={12}>
-              <VuiTypography color="white">No NFTs in your collection.</VuiTypography>
-            </Grid>
-          )}
-        </Grid>
-      </VuiBox>
-      <VuiBox py={3}>
-        <VuiBox mb={3}>
-          <VuiTypography color="white" fontWeight="bold">
-            NFTs For Sale
-          </VuiTypography>
+        <VuiBox sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '10px' }}>
+          <Tabs
+            sx={{ background: 'transparent' }}
+            value={selectedTab}
+            onChange={(_, val) => setSelectedTab(val)}
+            aria-label="Tabs"
+          >
+            <Tab label="Owned" id="tab0" aria-controls="tabPanel0" />
+            <Tab label="On Sale" id="tab1" aria-controls="tabPanel1" />
+          </Tabs>
         </VuiBox>
-        <Grid container spacing={5} direction="row" alignItems="stretch">
-          {salesCollection && Object.keys(salesCollection).length > 0 ? (
-            Object.keys(salesCollection).map((id) => (
-              <Grid key={id} item xs={12} md={4}>
-                <ItemCard
-                  image={`https://${salesCollection[id].nftRef?.ipfsHash}.ipfs.nftstorage.link`}
-                  title={salesCollection[id].nftRef?.metadata?.name}
-                  description={salesCollection[id].nftRef?.metadata?.description}
-                  link={`/nft/${salesCollection[id].nftRef?.id}`}
-                  price={salesCollection[id].price}
-                  onClickRemoveFromSale={() => handleRemoveFromSale(dispatch, item)}
-                  creator={salesCollection[id].nftRef?.metadata?.creator}
-                  isOwner
-                />
+        <TabPanel value={selectedTab} index={0}>
+          <Grid container spacing={5} direction="row" alignItems="stretch">
+            {collection && collection.length > 0 ? (
+              collection.map((nft) => (
+                <Grid key={nft.id} item xs={12} md={4}>
+                  <ItemCard
+                    image={`https://${nft.ipfsHash}.ipfs.nftstorage.link`}
+                    title={nft.metadata?.name}
+                    description={nft.metadata?.description}
+                    link={`/nft/${nft.id}`}
+                    onClickListForSale={() => handleOpenModal(nft)}
+                    creator={nft.metadata?.creator}
+                  />
+                </Grid>
+              ))
+            ) : (
+              <Grid item md={12}>
+                <VuiTypography color="white">No NFTs in your collection.</VuiTypography>
               </Grid>
-            ))
-          ) : (
-            <Grid item md={12}>
-              <VuiTypography color="white">No NFTs in your sales collection.</VuiTypography>
-            </Grid>
-          )}
-        </Grid>
+            )}
+          </Grid>
+        </TabPanel>
+        <TabPanel value={selectedTab} index={1}>
+          <Grid container spacing={5} direction="row" alignItems="stretch">
+            {salesCollection && Object.keys(salesCollection).length > 0 ? (
+              Object.keys(salesCollection).map((id) => (
+                <Grid key={id} item xs={12} md={4}>
+                  <ItemCard
+                    image={`https://${salesCollection[id].nftRef?.ipfsHash}.ipfs.nftstorage.link`}
+                    title={salesCollection[id].nftRef?.metadata?.name}
+                    description={salesCollection[id].nftRef?.metadata?.description}
+                    link={`/nft/${salesCollection[id].nftRef?.id}`}
+                    price={salesCollection[id].price}
+                    onClickRemoveFromSale={() => handleRemoveFromSale(dispatch, item)}
+                    creator={salesCollection[id].nftRef?.metadata?.creator}
+                    isOwner
+                  />
+                </Grid>
+              ))
+            ) : (
+              <Grid item md={12}>
+                <VuiTypography color="white">No NFTs for sale.</VuiTypography>
+              </Grid>
+            )}
+          </Grid>
+        </TabPanel>
       </VuiBox>
     </>
   ) : !user || !loggedIn ? (

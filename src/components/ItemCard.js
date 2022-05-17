@@ -3,9 +3,11 @@ import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import Tooltip from '@mui/material/Tooltip';
 import { Link } from 'react-router-dom';
+import { roundToTwo } from 'utils/utils';
 import VuiBox from 'vui-theme/components/VuiBox';
 import VuiButton from 'vui-theme/components/VuiButton';
 import VuiTypography from 'vui-theme/components/VuiTypography';
+import PriceUSD from './PriceUSD';
 
 export default function ItemCard({
   image,
@@ -70,7 +72,10 @@ export default function ItemCard({
             {price && (
               <VuiBox>
                 <VuiTypography variant="button" fontWeight="bold" color="success">
-                  {parseFloat(price)} FLOW
+                  {roundToTwo(parseFloat(price))} FLOW
+                </VuiTypography>
+                <VuiTypography variant="caption" sx={{ marginLeft: '5px', color: '#818ea3' }}>
+                  (<PriceUSD value={price} />)
                 </VuiTypography>
               </VuiBox>
             )}

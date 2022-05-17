@@ -4,6 +4,10 @@ import { unlistNFTFromSale } from 'flow/unlistNFTFromSale';
 import { toast } from 'react-toastify';
 import { setLoadingAction } from 'state/actions/loadingActions';
 
+export const roundToTwo = (num) => {
+  return +(Math.round(num + 'e+2') + 'e-2');
+};
+
 export const constructSaleItemDoc = (nft, saleItemEvent, userAddr) => ({
   nftID: saleItemEvent.id,
   price: saleItemEvent.price,

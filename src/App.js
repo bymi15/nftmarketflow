@@ -1,6 +1,7 @@
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import { getIPFSAPIKey } from 'api/apiKeys';
+import { getCurrency } from 'api/currency';
 import Footer from 'components/Footer';
 import Loader from 'components/Loader';
 import Navbar from 'components/Navbar';
@@ -22,7 +23,7 @@ import { useGlobalContext } from 'state/context';
 export default function App() {
   const { pathname } = useLocation();
   const {
-    state: { user, loading, loadingText },
+    state: { user, loading, loadingText, currency },
     dispatch,
   } = useGlobalContext();
 
@@ -77,6 +78,20 @@ export default function App() {
     }
     fetchKeys();
   }, []);
+
+  useEffect(() => {
+    async function fetchCurrencyData() {
+      try {
+        await getCurrency(dispatch);
+      } catch (e) {
+        console.log('error occurred while getting api keys');
+        setLoadingAction(dispatch, false, '');
+      }
+    }
+    if (!currency) {
+      fetchCurrencyData();
+    }
+  }, [currency]);
 
   return (
     <>
