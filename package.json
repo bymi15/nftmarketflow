@@ -1,6 +1,6 @@
 {
   "name": "nftmarketflow",
-  "homepage": "http://bymi15.github.io/nftmarketflow",
+  "homepage": "https://bymi15.github.io/nftmarketflow",
   "version": "0.1.0",
   "private": true,
   "author": "Brian Min",
@@ -52,7 +52,8 @@
     "dev": "nodemon server/server.js",
     "server": "node server/server.js",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build && git push heroku main"
+    "deploy": "gh-pages -d build",
+    "deploy-all": "gh-pages -d build && git push heroku main"
   },
   "eslintConfig": {
     "extends": [
