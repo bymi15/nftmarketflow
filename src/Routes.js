@@ -42,7 +42,7 @@ const routes = [
 
 export default function Routes() {
   return (
-    <RoutesDOM>
+    <RoutesDOM basename="/nftmarketflow">
       {routes.map((route) => (
         <Route exact path={route.route} element={<>{route.component}</>} key={route.key} />
       ))}
