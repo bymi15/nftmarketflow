@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/nftmarketflow/static/css/main.29238cbf.css",
-    "main.js": "/nftmarketflow/static/js/main.8a2cc649.js",
+    "main.js": "/nftmarketflow/static/js/main.42edc055.js",
     "static/media/mainscreen.jpg": "/nftmarketflow/static/media/mainscreen.78ae783fcf02c764ca94.jpg",
     "static/media/body-background.png": "/nftmarketflow/static/media/body-background.7d7d88a8b4fee8fe76a8.png",
     "static/media/avatar3.png": "/nftmarketflow/static/media/avatar3.37c832d11fa533f0d28f.png",
@@ -18,10 +18,10 @@
     "static/media/ListNFTForSale.cdc": "/nftmarketflow/static/media/ListNFTForSale.521fb19c94dbe7ca0a2a.cdc",
     "static/media/UnlistNFTFromSale.cdc": "/nftmarketflow/static/media/UnlistNFTFromSale.70c6d74ca55a696c6b4c.cdc",
     "main.29238cbf.css.map": "/nftmarketflow/static/css/main.29238cbf.css.map",
-    "main.8a2cc649.js.map": "/nftmarketflow/static/js/main.8a2cc649.js.map"
+    "main.42edc055.js.map": "/nftmarketflow/static/js/main.42edc055.js.map"
   },
   "entrypoints": [
     "static/css/main.29238cbf.css",
-    "static/js/main.8a2cc649.js"
+    "static/js/main.42edc055.js"
   ]
 }
