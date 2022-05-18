@@ -3,7 +3,7 @@ import Collection from 'pages/Collection';
 import CreateItem from 'pages/CreateItem';
 import Home from 'pages/Home';
 import Items from 'pages/Items';
-import { BrowserRouter, Navigate, Route, Routes as RoutesDOM } from 'react-router-dom';
+import { Navigate, Route, Routes as RoutesDOM } from 'react-router-dom';
 
 const routes = [
   {
@@ -45,13 +45,11 @@ const routes = [
 
 export default function Routes() {
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <RoutesDOM>
-        {routes.map((route) => (
-          <Route exact path={route.route} element={<>{route.component}</>} key={route.key} />
-        ))}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </RoutesDOM>
-    </BrowserRouter>
+    <RoutesDOM>
+      {routes.map((route) => (
+        <Route exact path={route.route} element={<>{route.component}</>} key={route.key} />
+      ))}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </RoutesDOM>
   );
 }

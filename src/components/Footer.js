@@ -34,17 +34,32 @@ function Footer() {
       <VuiBox item xs={10}>
         <VuiBox display="flex" justifyContent="center" flexWrap="wrap" mb={3}>
           <VuiBox mr={{ xs: '20px', lg: '46px' }}>
-            <VuiTypography component="a" href="/items" variant="body2" color="white">
+            <VuiTypography
+              component="a"
+              href={`${process.env.PUBLIC_URL}/items`}
+              variant="body2"
+              color="white"
+            >
               Items
             </VuiTypography>
           </VuiBox>
           <VuiBox mr={{ xs: '20px', lg: '46px' }}>
-            <VuiTypography component="a" href="/transactions" variant="body2" color="white">
-              Transactions
+            <VuiTypography
+              component="a"
+              href={`${process.env.PUBLIC_URL}/activity`}
+              variant="body2"
+              color="white"
+            >
+              Activity
             </VuiTypography>
           </VuiBox>
           <VuiBox mr={{ xs: '20px', lg: '46px' }}>
-            <VuiTypography component="a" href="/" variant="body2" color="white">
+            <VuiTypography
+              component="a"
+              href={`${process.env.PUBLIC_URL}`}
+              variant="body2"
+              color="white"
+            >
               Home
             </VuiTypography>
           </VuiBox>

@@ -53,7 +53,7 @@
     "server": "node server/server.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "deploy-all": "gh-pages -d build && git push heroku main"
+    "deploy:all": "gh-pages -d build && git push heroku main"
   },
   "eslintConfig": {
     "extends": [
