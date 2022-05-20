@@ -1,27 +1,24 @@
 {
   "files": {
     "main.css": "/nftmarketflow/static/css/main.29238cbf.css",
-    "main.js": "/nftmarketflow/static/js/main.f5bf826d.js",
+    "main.js": "/nftmarketflow/static/js/main.55d13993.js",
     "static/media/mainscreen.jpg": "/nftmarketflow/static/media/mainscreen.78ae783fcf02c764ca94.jpg",
     "static/media/body-background.png": "/nftmarketflow/static/media/body-background.7d7d88a8b4fee8fe76a8.png",
-    "static/media/avatar3.png": "/nftmarketflow/static/media/avatar3.37c832d11fa533f0d28f.png",
-    "static/media/avatar2.png": "/nftmarketflow/static/media/avatar2.e81efbfa6cdd3fe024c7.png",
     "static/media/nftplaceholder.jpg": "/nftmarketflow/static/media/nftplaceholder.9852ba40935e6eb649d7.jpg",
-    "static/media/avatar1.png": "/nftmarketflow/static/media/avatar1.ce022770a11ff3434c20.png",
-    "static/media/avatar4.png": "/nftmarketflow/static/media/avatar4.9bcc22b7fc82b4eb3c5d.png",
     "static/media/SetupUser.cdc": "/nftmarketflow/static/media/SetupUser.023e55b3b82400e01ddc.cdc",
     "static/media/PurchaseNFT.cdc": "/nftmarketflow/static/media/PurchaseNFT.5442f9f37cb8a132162f.cdc",
     "static/media/GetUserNFTsForSale.cdc": "/nftmarketflow/static/media/GetUserNFTsForSale.973d6803085e0bab858a.cdc",
     "index.html": "/nftmarketflow/index.html",
+    "static/media/GetTotalSupply.cdc": "/nftmarketflow/static/media/GetTotalSupply.919c4ccef44a2334ed94.cdc",
     "static/media/GetUserNFTs.cdc": "/nftmarketflow/static/media/GetUserNFTs.29362eae90ae4c8950c6.cdc",
     "static/media/MintNFT.cdc": "/nftmarketflow/static/media/MintNFT.37f4ba04f6d5ab8293b5.cdc",
     "static/media/ListNFTForSale.cdc": "/nftmarketflow/static/media/ListNFTForSale.521fb19c94dbe7ca0a2a.cdc",
     "static/media/UnlistNFTFromSale.cdc": "/nftmarketflow/static/media/UnlistNFTFromSale.70c6d74ca55a696c6b4c.cdc",
     "main.29238cbf.css.map": "/nftmarketflow/static/css/main.29238cbf.css.map",
-    "main.f5bf826d.js.map": "/nftmarketflow/static/js/main.f5bf826d.js.map"
+    "main.55d13993.js.map": "/nftmarketflow/static/js/main.55d13993.js.map"
   },
   "entrypoints": [
     "static/css/main.29238cbf.css",
-    "static/js/main.f5bf826d.js"
+    "static/js/main.55d13993.js"
   ]
 }
