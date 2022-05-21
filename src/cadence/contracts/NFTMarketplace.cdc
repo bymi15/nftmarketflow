@@ -25,51 +25,57 @@ pub contract NFTMarketplace {
 
     // Event that is emitted when a sale item is removed
     pub event SaleItemRemoved(id: UInt64)
+    
+    // Event that is emitted when a sale item is purchased
+    pub event SaleItemPurchased(id: UInt64, price: UFix64, seller: Address?)
 
     pub resource SaleCollection: SaleCollectionPublic {
-        pub var nfts: {UInt64: UFix64}
-        pub let NFTCollection: Capability<&NFTStore.Collection>
+        pub var prices: {UInt64: UFix64}
+        pub let OwnerNFTCollection: Capability<&NFTStore.Collection>
         pub let FlowTokenVault: Capability<&FlowToken.Vault{FungibleToken.Receiver}>
 
         pub fun listNFT(id: UInt64, price: UFix64) {
             pre {
                 price >= 0.0: "Price cannot be negative"
-                self.NFTCollection.borrow()!.getIDs().contains(id): "Does not own this NFT"
+                self.OwnerNFTCollection.borrow()!.getIDs().contains(id): "Does not own this NFT"
             }
-            self.nfts[id] = price
+            self.prices[id] = price
             emit SaleItemListed(id: id, price: price)
         }
 
         pub fun unlistNFT(id: UInt64) {
-            self.nfts.remove(key: id)
+            self.prices.remove(key: id)
             emit SaleItemRemoved(id: id)
         }
 
         pub fun purchaseNFT(id: UInt64, recipientCollection: &NFTStore.Collection{NonFungibleToken.CollectionPublic}, payment: @FlowToken.Vault) {
+            let price = self.prices[id]
             pre {
-                payment.balance == self.nfts[id]: "Payment is not equal to the price of NFT"
+                payment.balance == price: "Payment is not equal to the price of NFT"
             }
-            recipientCollection.deposit(token: <- self.NFTCollection.borrow()!.withdraw(withdrawID: id))
+            recipientCollection.deposit(token: <- self.OwnerNFTCollection.borrow()!.withdraw(withdrawID: id))
+            self.prices.remove(key: id)
             self.FlowTokenVault.borrow()!.deposit(from: <- payment)
+            emit SaleItemPurchased(id: id, price: price, seller: self.owner?.address)
         }
 
         pub fun getPrice(id: UInt64): UFix64 {
-            return self.nfts[id]!
+            return self.prices[id]!
         }
 
         pub fun getIDs(): [UInt64] {
-            return self.nfts.keys
+            return self.prices.keys
         }
 
-        init(NFTCollection: Capability<&NFTStore.Collection>, FlowTokenVault: Capability<&FlowToken.Vault{FungibleToken.Receiver}>) {
-            self.nfts = {}
-            self.NFTCollection = NFTCollection
+        init(OwnerNFTCollection: Capability<&NFTStore.Collection>, FlowTokenVault: Capability<&FlowToken.Vault{FungibleToken.Receiver}>) {
+            self.prices = {}
+            self.OwnerNFTCollection = OwnerNFTCollection
             self.FlowTokenVault = FlowTokenVault
         }
     }
 
-    pub fun createSaleCollection(NFTCollection: Capability<&NFTStore.Collection>, FlowTokenVault: Capability<&FlowToken.Vault{FungibleToken.Receiver}>): @SaleCollection {
-        return <- create SaleCollection(NFTCollection: NFTCollection, FlowTokenVault: FlowTokenVault)
+    pub fun createSaleCollection(OwnerNFTCollection: Capability<&NFTStore.Collection>, FlowTokenVault: Capability<&FlowToken.Vault{FungibleToken.Receiver}>): @SaleCollection {
+        return <- create SaleCollection(OwnerNFTCollection: OwnerNFTCollection, FlowTokenVault: FlowTokenVault)
     }
 
     init() {}

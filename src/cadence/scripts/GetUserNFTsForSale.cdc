@@ -10,11 +10,14 @@ pub fun main(account: Address): {UInt64: NFTMarketplace.SaleItem} {
                     .borrow<&NFTStore.Collection{NonFungibleToken.CollectionPublic, NFTStore.CollectionPublic}>()
                     ?? panic("Failed to get user's collection.")
   let saleIDs = saleCollection.getIDs()
+  let ownedIDs = collection.getIDs()
   let res: {UInt64: NFTMarketplace.SaleItem} = {}
   for saleID in saleIDs {
-    let price = saleCollection.getPrice(id: saleID)
-    let nftRef = collection.borrowEntireNFT(id: saleID)
-    res.insert(key: nftRef.id, NFTMarketplace.SaleItem(price: price, nftRef: nftRef))
+    if ownedIDs.containsKey(saleID) {
+      let price = saleCollection.getPrice(id: saleID)
+      let nftRef = collection.borrowEntireNFT(id: saleID)
+      res.insert(key: nftRef.id, NFTMarketplace.SaleItem(price: price, nftRef: nftRef))
+    }
   }
   return res
 }
