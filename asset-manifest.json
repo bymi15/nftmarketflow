@@ -1,24 +1,24 @@
 {
   "files": {
     "main.css": "/nftmarketflow/static/css/main.29238cbf.css",
-    "main.js": "/nftmarketflow/static/js/main.c6b98fb1.js",
+    "main.js": "/nftmarketflow/static/js/main.cd02be4c.js",
     "static/media/mainscreen.jpg": "/nftmarketflow/static/media/mainscreen.78ae783fcf02c764ca94.jpg",
     "static/media/body-background.png": "/nftmarketflow/static/media/body-background.7d7d88a8b4fee8fe76a8.png",
     "static/media/nftplaceholder.jpg": "/nftmarketflow/static/media/nftplaceholder.9852ba40935e6eb649d7.jpg",
     "static/media/SetupUser.cdc": "/nftmarketflow/static/media/SetupUser.023e55b3b82400e01ddc.cdc",
     "static/media/PurchaseNFT.cdc": "/nftmarketflow/static/media/PurchaseNFT.5442f9f37cb8a132162f.cdc",
-    "static/media/GetUserNFTsForSale.cdc": "/nftmarketflow/static/media/GetUserNFTsForSale.aa5251b52f8e8d3bdb64.cdc",
+    "static/media/GetUserNFTsForSale.cdc": "/nftmarketflow/static/media/GetUserNFTsForSale.c4b18a563c98b73c2ae4.cdc",
     "index.html": "/nftmarketflow/index.html",
-    "static/media/GetUserNFTs.cdc": "/nftmarketflow/static/media/GetUserNFTs.07d16aaefe977d28e977.cdc",
     "static/media/GetTotalSupply.cdc": "/nftmarketflow/static/media/GetTotalSupply.919c4ccef44a2334ed94.cdc",
+    "static/media/GetUserNFTs.cdc": "/nftmarketflow/static/media/GetUserNFTs.29362eae90ae4c8950c6.cdc",
     "static/media/MintNFT.cdc": "/nftmarketflow/static/media/MintNFT.37f4ba04f6d5ab8293b5.cdc",
     "static/media/ListNFTForSale.cdc": "/nftmarketflow/static/media/ListNFTForSale.521fb19c94dbe7ca0a2a.cdc",
     "static/media/UnlistNFTFromSale.cdc": "/nftmarketflow/static/media/UnlistNFTFromSale.70c6d74ca55a696c6b4c.cdc",
     "main.29238cbf.css.map": "/nftmarketflow/static/css/main.29238cbf.css.map",
-    "main.c6b98fb1.js.map": "/nftmarketflow/static/js/main.c6b98fb1.js.map"
+    "main.cd02be4c.js.map": "/nftmarketflow/static/js/main.cd02be4c.js.map"
   },
   "entrypoints": [
     "static/css/main.29238cbf.css",
-    "static/js/main.c6b98fb1.js"
+    "static/js/main.cd02be4c.js"
   ]
 }
