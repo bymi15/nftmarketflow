@@ -1,32 +1,9 @@
-import VuiBadge from 'vui-theme/components/VuiBadge';
 import VuiBox from 'vui-theme/components/VuiBox';
 import VuiTypography from 'vui-theme/components/VuiTypography';
-import { timelineItem } from 'vui-theme/examples/Timeline/TimelineItem/styles';
 
-export default function ActivityItem({
-  color,
-  icon,
-  image,
-  title,
-  dateTime,
-  description,
-  badges,
-  lastItem,
-}) {
-  const renderBadges =
-    badges && badges.length > 0
-      ? badges.map((badge, key) => {
-          const badgeKey = `badge-${key}`;
-          return (
-            <VuiBox key={badgeKey} mr={key === badges.length - 1 ? 0 : 0.5}>
-              <VuiBadge color={color} size="xs" badgeContent={badge} container />
-            </VuiBox>
-          );
-        })
-      : null;
-
+export default function ActivityItem({ icon, image, title, dateTime, description }) {
   return (
-    <VuiBox position="relative" mb="24px" sx={(theme) => timelineItem(theme, { color })}>
+    <VuiBox position="relative" mb="24px">
       <VuiBox
         component="img"
         src={image}
@@ -34,7 +11,6 @@ export default function ActivityItem({
         sx={{ maxWidth: '70px' }}
         borderRadius="15px"
         position="absolute"
-        top="3.25%"
         left="-8px"
         zIndex={1}
       />
@@ -65,11 +41,6 @@ export default function ActivityItem({
             {dateTime}
           </VuiTypography>
         </VuiBox>
-        {badges && badges.length > 0 ? (
-          <VuiBox display="flex" pb={lastItem ? 1 : 2}>
-            {renderBadges}
-          </VuiBox>
-        ) : null}
       </VuiBox>
     </VuiBox>
   );

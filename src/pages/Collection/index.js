@@ -7,19 +7,22 @@ import { getUserNFTsForSale } from 'flow/getUserNFTsForSale';
 import { listNFTForSale } from 'flow/listNFTForSale';
 import { setupUser } from 'flow/setupUser';
 import { loginWallet } from 'flow/wallet';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { setLoadingAction } from 'state/actions/loadingActions';
 import { useGlobalContext } from 'state/context';
-import { constructSaleItemDoc } from 'utils/utils';
 import VuiBox from 'vui-theme/components/VuiBox';
 import VuiButton from 'vui-theme/components/VuiButton';
 import VuiTypography from 'vui-theme/components/VuiTypography';
 import ListForSaleModal from './components/ListForSaleModal';
-import { handleRemoveFromSale } from 'utils/utils';
+import {
+  handleRemoveFromSale,
+  constructActivityDoc,
+  isItemForSale,
+  constructSaleItemDoc,
+} from 'utils/utils';
 import TabPanel from 'components/TabPanel';
 import { Tab, Tabs } from '@mui/material';
-import { constructActivityDoc } from 'utils/utils';
 import { insertActivity } from 'api/activities';
 
 export default function Collection() {
@@ -27,9 +30,23 @@ export default function Collection() {
     state: { user, loggedIn, collection, salesCollection, collectionReady, loading },
     dispatch,
   } = useGlobalContext();
+  const [processedCollection, setProcessedCollection] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedNFT, setSelectedNFT] = useState();
   const [selectedTab, setSelectedTab] = useState(0);
+
+  useEffect(() => {
+    let newCollection = [];
+    if (collection && salesCollection) {
+      for (let c of collection) {
+        let newC = { ...c, forSale: false };
+        newC.forSale = isItemForSale(c, salesCollection);
+        newCollection.push(newC);
+      }
+      setProcessedCollection(newCollection);
+    }
+  }, [collection, salesCollection, setProcessedCollection]);
+
   const handleListForSale = async (item, nft) => {
     try {
       await listNFTForSale(item, dispatch);
@@ -96,16 +113,17 @@ export default function Collection() {
         </VuiBox>
         <TabPanel value={selectedTab} index={0}>
           <Grid container spacing={5} direction="row" alignItems="stretch">
-            {collection && collection.length > 0 ? (
-              collection.map((nft) => (
+            {processedCollection.length > 0 ? (
+              processedCollection.map((nft) => (
                 <Grid key={nft.id} item xs={12} md={4}>
                   <ItemCard
                     image={`https://${nft.ipfsHash}.ipfs.nftstorage.link`}
                     title={nft.metadata?.name}
                     description={nft.metadata?.description}
                     link={`/nft/${nft.id}`}
-                    onClickListForSale={() => handleOpenModal(nft)}
+                    onClickListForSale={nft.forSale ? undefined : () => handleOpenModal(nft)}
                     creator={nft.metadata?.creator}
+                    owner={user?.addr}
                   />
                 </Grid>
               ))
@@ -127,7 +145,7 @@ export default function Collection() {
                     description={salesCollection[id].nftRef?.metadata?.description}
                     link={`/nft/${salesCollection[id].nftRef?.id}`}
                     price={salesCollection[id].price}
-                    onClickRemoveFromSale={() => handleRemoveFromSale(dispatch, item)}
+                    // onClickRemoveFromSale={() => handleRemoveFromSale(dispatch, item)}
                     creator={salesCollection[id].nftRef?.metadata?.creator}
                     isOwner
                   />

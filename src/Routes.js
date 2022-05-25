@@ -3,6 +3,7 @@ import Collection from 'pages/Collection';
 import CreateItem from 'pages/CreateItem';
 import Home from 'pages/Home';
 import Items from 'pages/Items';
+import Rankings from 'pages/Rankings';
 import { Navigate, Route, Routes as RoutesDOM } from 'react-router-dom';
 
 const routes = [
@@ -11,35 +12,36 @@ const routes = [
     key: 'home',
     route: '/',
     component: <Home />,
-    noCollapse: true,
   },
   {
     name: 'Items',
     key: 'items',
     route: '/items',
     component: <Items />,
-    noCollapse: true,
   },
   {
     name: 'Collection',
     key: 'collection',
     route: '/collection',
     component: <Collection />,
-    noCollapse: true,
   },
   {
     name: 'Create Item',
     key: 'create',
     route: '/create',
     component: <CreateItem />,
-    noCollapse: true,
   },
   {
     name: 'Activity',
     key: 'activity',
     route: '/activity',
     component: <Activity />,
-    noCollapse: true,
+  },
+  {
+    name: 'Rankings',
+    key: 'rankings',
+    route: '/rankings',
+    component: <Rankings />,
   },
 ];
 

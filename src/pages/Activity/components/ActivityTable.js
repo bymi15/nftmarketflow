@@ -1,40 +1,14 @@
 import { Grid } from '@mui/material';
 import Card from '@mui/material/Card';
-import { getActivitiesByUser } from 'api/activities';
 import TableSkeleton from 'components/TableSkeleton';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
-import { BsCheckCircleFill, BsCreditCardFill } from 'react-icons/bs';
-import { FaBell, FaShoppingCart } from 'react-icons/fa';
-import { IoLogoCss3 } from 'react-icons/io';
-import { SiDropbox } from 'react-icons/si';
-import { useGlobalContext } from 'state/context';
 import { getActivityIcon } from 'utils/utils';
 import { getActivityDescription } from 'utils/utils';
-import palette from 'vui-theme/assets/theme/base/colors';
 import VuiBox from 'vui-theme/components/VuiBox';
 import VuiTypography from 'vui-theme/components/VuiTypography';
-import AdobeXD from 'vui-theme/examples/Icons/AdobeXD';
-import TimelineItem from 'vui-theme/examples/Timeline/TimelineItem';
 import ActivityItem from './ActivityItem';
 
-export default function ActivityTable() {
-  const {
-    state: { user, activities },
-    dispatch,
-  } = useGlobalContext();
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchActivities() {
-      setLoading(true);
-      await getActivitiesByUser(dispatch, user?.addr);
-      setLoading(false);
-    }
-    fetchActivities();
-  }, [getActivitiesByUser]);
-
+export default function ActivityTable({ user, activities, loading }) {
   return (
     <Card className="h-100">
       <VuiBox mb="16px">
@@ -49,15 +23,9 @@ export default function ActivityTable() {
           </VuiBox>
         </VuiBox>
       </VuiBox>
-      <VuiBox>
+      <VuiBox sx={{ paddingLeft: '10px' }}>
         {loading ? (
-          Array(4)
-            .fill()
-            .map((i) => (
-              <Grid item md={12} key={i} sx={{ marginBottom: '14px' }}>
-                <TableSkeleton />
-              </Grid>
-            ))
+          <TableSkeleton count={7} />
         ) : (
           <>
             {activities && activities.length > 0 ? (

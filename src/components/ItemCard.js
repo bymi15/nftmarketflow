@@ -1,12 +1,11 @@
 import { Button } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
-import Tooltip from '@mui/material/Tooltip';
 import { Link } from 'react-router-dom';
 import { roundToTwo } from 'utils/utils';
 import VuiBox from 'vui-theme/components/VuiBox';
 import VuiButton from 'vui-theme/components/VuiButton';
 import VuiTypography from 'vui-theme/components/VuiTypography';
+import AvatarTooltip from './AvatarTooltip';
 import PriceUSD from './PriceUSD';
 
 export default function ItemCard({
@@ -15,6 +14,7 @@ export default function ItemCard({
   link,
   price,
   creator,
+  owner,
   isOwner,
   onClickListForSale,
   onClickRemoveFromSale,
@@ -28,17 +28,9 @@ export default function ItemCard({
       }}
     >
       <VuiBox>
-        <VuiBox mb={3}>
-          <Tooltip title={`Creator: ${creator}`}>
-            <Avatar
-              alt="creator"
-              sx={{
-                width: 32,
-                height: 32,
-                background: 'linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%)',
-              }}
-            ></Avatar>
-          </Tooltip>
+        <VuiBox sx={{ display: 'flex', flexDirection: 'row' }} mb={3}>
+          <AvatarTooltip label="Owner" value={owner} size={32} />
+          <AvatarTooltip label="Creator" value={creator} size={32} sx={{ marginLeft: -1.3 }} />
         </VuiBox>
         <Link to={link}>
           <VuiBox

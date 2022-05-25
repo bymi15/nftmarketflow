@@ -13,7 +13,7 @@ pub fun main(account: Address): {UInt64: NFTMarketplace.SaleItem} {
   let ownedIDs = collection.getIDs()
   let res: {UInt64: NFTMarketplace.SaleItem} = {}
   for saleID in saleIDs {
-    if ownedIDs.containsKey(saleID) {
+    if ownedIDs.contains(saleID) {
       let price = saleCollection.getPrice(id: saleID)
       let nftRef = collection.borrowEntireNFT(id: saleID)
       res.insert(key: nftRef.id, NFTMarketplace.SaleItem(price: price, nftRef: nftRef))

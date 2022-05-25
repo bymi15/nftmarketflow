@@ -56,3 +56,11 @@ export const getSaleItemRemovedEvent = async () => {
     eventName: 'SaleItemRemoved',
   });
 };
+
+export const getSaleItemPurchasedEvent = async () => {
+  return await getEvent({
+    contractName: 'NFTMarketplace',
+    contractAddress: '3acc4fa9e74dfa02',
+    eventName: 'SaleItemPurchased',
+  });
+};

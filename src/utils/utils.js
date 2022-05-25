@@ -7,8 +7,24 @@ import { MdSell } from 'react-icons/md';
 import { FaCloudUploadAlt, FaClipboardList } from 'react-icons/fa';
 import palette from 'vui-theme/assets/theme/base/colors';
 
+export const getImageURL = (ipfsHash) => `https://${ipfsHash}.ipfs.nftstorage.link`;
+
 export const roundToTwo = (num) => {
   return +(Math.round(num + 'e+2') + 'e-2');
+};
+
+export const sortItemsByRecentDate = (items) =>
+  items ? items.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) : [];
+
+export const isItemForSale = (collectionItem, salesCollection) => {
+  if (salesCollection) {
+    for (let c of Object.values(salesCollection)) {
+      if (c.nftRef?.id === collectionItem.id) {
+        return true;
+      }
+    }
+  }
+  return false;
 };
 
 export const constructSaleItemDoc = (nft, saleItemEvent, userAddr) => ({
@@ -63,25 +79,35 @@ export const handleRemoveFromSale = async (dispatch, item) => {
   setLoadingAction(dispatch, false, '');
 };
 
-export const getActivityDescription = (activity, userAddr) => {
-  const userDisplay = userAddr === activity.userAddr ? 'You' : activity.userAddr;
+export const getActivityDescription = (activity, userAddr, withUser = true) => {
+  const userDisplay = userAddr === activity.userAddr ? <b>You</b> : <b>{activity.userAddr}</b>;
   switch (activity.eventType) {
     case 'LIST':
-      return (
+      return withUser ? (
         <>
-          listed by <b>{userDisplay}</b> for <b>{activity.price} FLOW</b>
+          listed by {userDisplay} for <b>{activity.price} FLOW</b>
+        </>
+      ) : (
+        <>
+          was <b>listed</b> for <b>{activity.price} FLOW</b>
         </>
       );
     case 'MINT':
-      return (
+      return withUser ? (
+        <>minted by {userDisplay}</>
+      ) : (
         <>
-          minted by <b>{userDisplay}</b>
+          was <b>minted</b>
         </>
       );
     case 'SALE':
-      return (
+      return withUser ? (
         <>
-          purchased by <b>{userDisplay}</b> for <b>{activity.price} FLOW</b>
+          purchased by {userDisplay} for <b>{activity.price} FLOW</b>
+        </>
+      ) : (
+        <>
+          was <b>purchased</b> for <b>{activity.price} FLOW</b>
         </>
       );
     default:
@@ -96,7 +122,7 @@ export const getActivityIcon = (activity) => {
     case 'MINT':
       return <FaCloudUploadAlt size="16px" color={palette.success.main} />;
     case 'SALE':
-      return <MdSell size="16px" color={palette.primary.main} />;
+      return <MdSell size="16px" color={palette.warning.main} />;
     default:
       return <BsList size="16px" color={palette.lightblue.main} />;
   }

@@ -1,6 +1,7 @@
 import { Modal } from '@mui/material';
 import { useEffect } from 'react';
 import { handleInputChange, useNestedState } from 'utils/hooks';
+import { getImageURL } from 'utils/utils';
 import VuiBox from 'vui-theme/components/VuiBox';
 import VuiButton from 'vui-theme/components/VuiButton';
 import VuiInput from 'vui-theme/components/VuiInput';
@@ -47,7 +48,7 @@ export default function ListForSaleModal({ open, setOpen, nft, handleListForSale
         >
           <VuiBox
             component="img"
-            src={`https://${nft?.ipfsHash}.ipfs.nftstorage.link`}
+            src={getImageURL(nft?.ipfsHash)}
             borderRadius="15px"
             sx={{ width: 200 }}
           />

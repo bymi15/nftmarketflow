@@ -70,7 +70,7 @@ pub contract NFTStore: NonFungibleToken {
     }
 
     pub fun mintToken(ipfsHash: String, metadata: {String: String}): @NFTStore.NFT {
-        metadata.insert(key: "creator", self.account.address.toString())
+        metadata.insert(key: "creator", self.owner?.address.toString())
         return <- create NFT(ipfsHash: ipfsHash, metadata: metadata)
     }
     

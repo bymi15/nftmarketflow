@@ -17,6 +17,8 @@ import { setLoadingAction } from 'state/actions/loadingActions';
 import { getUserNFTs } from 'flow/getUserNFTs';
 import { insertActivity } from 'api/activities';
 import { constructActivityDoc } from 'utils/utils';
+import { getSaleItemPurchasedEvent } from 'flow/events';
+import { sortItemsByRecentDate } from 'utils/utils';
 
 const mockItems = [
   {
@@ -58,10 +60,11 @@ const mockItems = [
 
 export default function Items() {
   const {
-    state: { user, loggedIn, saleItems, saleItemsError },
+    state: { user, loggedIn, saleItems },
     dispatch,
   } = useGlobalContext();
 
+  const [sortedSaleItems, setSortedSaleItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalItem, setModalItem] = useState();
@@ -73,7 +76,13 @@ export default function Items() {
     }
     setLoading(true);
     loadSaleItems();
-  }, []);
+  }, [getSaleItems]);
+
+  useEffect(() => {
+    if (saleItems && saleItems.length > 0) {
+      setSortedSaleItems(sortItemsByRecentDate(saleItems));
+    }
+  }, [saleItems]);
 
   const handleOpenModal = (item) => {
     setModalItem(item);
@@ -89,6 +98,8 @@ export default function Items() {
 
     try {
       await purchaseNFT(item.listedBy, item.nftID, dispatch);
+      const purchasedEvent = await getSaleItemPurchasedEvent(dispatch);
+      console.log(purchasedEvent);
       setLoadingAction(dispatch, true, 'Updating database...');
       await removeSaleItem(dispatch, item._id);
       await insertActivity(dispatch, constructActivityDoc('SALE', null, item, user?.addr));
@@ -104,12 +115,7 @@ export default function Items() {
 
   return loading ? (
     <VuiBox py={3}>
-      <VuiBox mb={3}>
-        <VuiTypography color="white" fontWeight="bold">
-          NFT Collection
-        </VuiTypography>
-      </VuiBox>
-      <Grid container spacing={5} direction="row" alignItems="stretch">
+      <Grid container mt={3} spacing={5} direction="row" alignItems="stretch">
         {Array(6)
           .fill()
           .map((i) => (
@@ -128,38 +134,31 @@ export default function Items() {
         handlePurchase={handlePurchase}
       />
       <VuiBox py={3}>
-        <VuiBox mb={3}>
-          <VuiTypography color="white" fontWeight="bold">
-            NFT Collection
-          </VuiTypography>
-        </VuiBox>
-        <Grid container spacing={5} direction="row" alignItems="stretch">
-          {saleItems && saleItems.length > 0
-            ? saleItems.map((item) => (
-                <Grid item xs={12} md={4} key={item.nftID}>
-                  <ItemCard
-                    image={`https://${item.ipfsHash}.ipfs.nftstorage.link`}
-                    title={item.metadata?.name}
-                    description={item.metadata?.description}
-                    link={`/nft/${item.nftID}`}
-                    price={item.price}
-                    isOwner={item.listedBy === user?.addr}
-                    onClickPurchase={() => handleOpenModal(item)}
-                    creator={item.metadata?.creator}
-                    onClickRemoveFromSale={() => handleRemoveFromSale(dispatch, item)}
-                  />
-                </Grid>
-              ))
-            : mockItems.map((c) => (
-                <Grid item xs={12} md={4} key={c.title}>
-                  <ItemCard
-                    image={c.image}
-                    title={c.title}
-                    description={c.description}
-                    link={c.link}
-                  />
-                </Grid>
-              ))}
+        <Grid container mt={3} spacing={5} direction="row" alignItems="stretch">
+          {sortedSaleItems.length > 0 ? (
+            sortedSaleItems.map((item) => (
+              <Grid item xs={12} md={4} key={item.nftID}>
+                <ItemCard
+                  image={`https://${item.ipfsHash}.ipfs.nftstorage.link`}
+                  title={item.metadata?.name}
+                  description={item.metadata?.description}
+                  link={`/nft/${item.nftID}`}
+                  price={item.price}
+                  isOwner={item.listedBy === user?.addr}
+                  onClickPurchase={() => handleOpenModal(item)}
+                  creator={item.metadata?.creator}
+                  owner={item.listedBy}
+                  onClickRemoveFromSale={() => handleRemoveFromSale(dispatch, item)}
+                />
+              </Grid>
+            ))
+          ) : (
+            <Grid item md={12}>
+              <VuiTypography variant="caption" color="white">
+                No items to display.
+              </VuiTypography>
+            </Grid>
+          )}
         </Grid>
       </VuiBox>
     </>
