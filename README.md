@@ -1,7 +1,12 @@
 # NFTMarketFlow
 
 NFT Marketplace built with the Flow blockchain, currently operating on Flow testnet.<br/>
-Personal project for learning more about Flow blockchain and writing smart contracts with Cadence.
+Personal project for learning more about Flow blockchain and writing smart contracts with Cadence.<br/>
+
+## Smart Contracts
+
+- NFTStore (Testnet): https://testnet.flowscan.org/contract/A.3acc4fa9e74dfa02.NFTStore
+- NFTMarketplace (Testnet): https://testnet.flowscan.org/contract/A.3acc4fa9e74dfa02.NFTMarketplace
 
 ## Tech stack
 
