@@ -56,7 +56,7 @@ pub contract NFTStore: NonFungibleToken {
         }
 
         pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT {
-            return (&self.ownedNFTs[id] as &NonFungibleToken?)!
+            return (&self.ownedNFTs[id] as &NonFungibleToken.NFT?)!
         }
 
         pub fun borrowEntireNFT(id: UInt64): &NFTStore.NFT {
@@ -70,7 +70,6 @@ pub contract NFTStore: NonFungibleToken {
     }
 
     pub fun mintToken(ipfsHash: String, metadata: {String: String}): @NFTStore.NFT {
-        metadata.insert(key: "creator", self.owner?.address.toString())
         return <- create NFT(ipfsHash: ipfsHash, metadata: metadata)
     }
     
