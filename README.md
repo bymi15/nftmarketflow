@@ -3,6 +3,10 @@
 NFT Marketplace built with the Flow blockchain, currently operating on Flow testnet.<br/>
 Personal project for learning more about Flow blockchain and writing smart contracts with Cadence.<br/>
 
+> **Warning**<br/>
+> This project was solely created for **learning purposes** and therefore it is **not suitable** for production environment.<br/>
+> Also, this codebase is not being actively maintained and is therefore likely to become outdated.
+
 ## Smart Contracts
 
 - NFTStore (Testnet): https://testnet.flowscan.org/contract/A.3acc4fa9e74dfa02.NFTStore
